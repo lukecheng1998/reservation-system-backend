@@ -29,11 +29,12 @@ exports.addEvent = (req, res) => {
     })
     .then(() => {
       return db
-        .doc(`/events/${addEventData.eventId}`)
+        .doc(`/events/${addEventData.email}`)
         .collection("attendants")
         .add({
           email: req.body.email,
           joined: new Date().toISOString(),
+          event: req.body.event
         });
     })
     .catch((err) => {
@@ -83,13 +84,16 @@ exports.addAttendant = (req, res) => {
           startDate: doc.data().startDate,
           email: doc.data().email,
         });
-        if (events.event === newUser.event) {
-          db.doc(`/event/${doc.id}`)
-            .doc(`/attendants/${newUser.email}`)
-            .set(newUser);
+        console.log(doc.data().event);
+        console.log(newUser.event);
+        if (doc.data().event === newUser.event) {
+          db.doc(`/events/${doc.id}`)
+            .collection('attendants')
+            .doc(newUser.email)
+            .set(newUser)
         }
       });
-      return res.json(events);
+      return res.json({message: "Added you to the event!"});
     })
     .catch((err) => console.error(err));
 };
