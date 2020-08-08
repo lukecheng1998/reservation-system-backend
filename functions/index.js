@@ -12,7 +12,7 @@ const { db } = require("./util/admin");
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
-const { signup, login } = require("./handlers/users");
+const { signup, login, getAuthenticatedUser } = require("./handlers/users");
 const {
   addEvent,
   getEvents,
@@ -23,4 +23,5 @@ app.post("/login", login);
 app.post("/signup", signup);
 app.get("/event", getEvents);
 app.post("/attendant", addAttendant);
+app.get("/user", FBAuth, getAuthenticatedUser);
 exports.api = functions.https.onRequest(app);

@@ -9,7 +9,7 @@ exports.addEvent = (req, res) => {
     event: req.body.event,
     location: req.body.location,
     startDate: req.body.startDate,
-    email: req.body.email,
+    email: req.user.email,
   };
 
   //console.log("about to validate errors")
@@ -44,9 +44,9 @@ exports.addEvent = (req, res) => {
       console.log(err);
     });
 };
-exports.getEvents = (res) => {
+exports.getEvents = (req, res) => {
   db.collection("events")
-    .orderBy("event", "asc")
+    .orderBy("startDate", "asc")
     .get()
     .then((data) => {
       let events = [];
